@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useEinstellungen } from '../lib/speicher'
 
 function Auswahl({ name, wert, optionen, onChange }) {
@@ -22,7 +23,7 @@ export default function Einstellungen({ onClose }) {
     return () => window.removeEventListener('keydown', esc)
   }, [onClose])
 
-  return (
+  return createPortal(
     <div className="modal-hg" onClick={onClose}>
       <div className="modal" role="dialog" aria-modal="true" aria-labelledby="einst-titel" onClick={(ev) => ev.stopPropagation()}>
         <h2 id="einst-titel">Einstellungen</h2>
@@ -46,18 +47,32 @@ export default function Einstellungen({ onClose }) {
         </section>
 
         <section className="schalter-liste">
-          <label className="schalter">
+          <label className="schalter schalter-haupt">
             <input type="checkbox" checked={e.atmosphaere} onChange={(ev) => setE({ atmosphaere: ev.target.checked })} />
             <span>
               <strong>Atmosphäre</strong>
-              <small>Kerzenflackern, Filmkörnung und Vignette</small>
+              <small>Hauptschalter für alle Effekte unten</small>
             </span>
           </label>
+          <div className={`unterschalter ${e.atmosphaere ? '' : 'aus'}`}>
+            {[
+              ['kerzen', 'Kerzenflackern', 'Flammen, Kronleuchter und Kerzenschein auf dem Papier'],
+              ['koernung', 'Filmkörnung', 'Leichtes Rauschen wie auf altem Film'],
+              ['vignette', 'Vignette', 'Dunkle Ränder und das Licht, das ab und zu flackert'],
+              ['nebel', 'Nebel', 'Langsam ziehender Nebel am unteren Rand'],
+              ['gruselEffekte', 'Gruselfaktor-Effekte', 'Roter Rand ab Stufe 4, Herzschlag bei Stufe 5'],
+            ].map(([k, titel, text]) => (
+              <label key={k} className="schalter">
+                <input type="checkbox" disabled={!e.atmosphaere} checked={e[k]} onChange={(ev) => setE({ [k]: ev.target.checked })} />
+                <span><strong>{titel}</strong><small>{text}</small></span>
+              </label>
+            ))}
+          </div>
           <label className="schalter">
             <input type="checkbox" checked={e.wenigBewegung} onChange={(ev) => setE({ wenigBewegung: ev.target.checked })} />
             <span>
               <strong>Weniger Bewegung</strong>
-              <small>Seiten wechseln ohne Animation</small>
+              <small>Keine Animationen, Seiten wechseln ohne Umblättern</small>
             </span>
           </label>
         </section>
@@ -65,6 +80,7 @@ export default function Einstellungen({ onClose }) {
         <p className="modal-hinweis">Einstellungen, Merkliste und Ermittlungsbretter werden nur auf diesem Gerät gespeichert.</p>
         <button className="knopf" onClick={onClose}>Fertig</button>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

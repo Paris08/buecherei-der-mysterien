@@ -65,7 +65,7 @@ main { position: relative; z-index: 1; min-height: calc(100vh - var(--kopf-h)); 
   animation: koernung 1.2s steps(4) infinite;
 }
 @keyframes koernung { 0% { transform: translate(0, 0) } 25% { transform: translate(-3%, 2%) } 50% { transform: translate(2%, -3%) } 75% { transform: translate(-2%, -1%) } }
-html[data-atmosphaere='aus'] .vignette, html[data-atmosphaere='aus'] .koernung { display: none; }
+html[data-vignette='aus'] .vignette, html[data-koernung='aus'] .koernung { display: none; }
 
 /* Kopfzeile */
 .kopf {
@@ -83,7 +83,7 @@ html[data-atmosphaere='aus'] .vignette, html[data-atmosphaere='aus'] .koernung {
 .kerze rect { fill: var(--papier); }
 .kerze .flamme { fill: var(--kerze); transform-origin: 16px 16px; animation: flackern 3.4s infinite ease-in-out; filter: drop-shadow(0 0 6px rgba(227, 166, 74, .8)); }
 @keyframes flackern { 0%, 100% { transform: scale(1) rotate(0) } 20% { transform: scale(1.06, .94) rotate(-3deg) } 45% { transform: scale(.95, 1.05) rotate(2deg) } 70% { transform: scale(1.03, .97) rotate(-1deg) } }
-html[data-atmosphaere='aus'] .kerze .flamme, html[data-bewegung='wenig'] .kerze .flamme { animation: none; }
+html[data-kerzen='aus'] .kerze .flamme, html[data-bewegung='wenig'] .kerze .flamme { animation: none; }
 
 .kopf nav { display: flex; gap: .2rem; margin-left: 1rem; }
 .kopf nav a { color: var(--knochen-leise); text-decoration: none; padding: .45rem .75rem; border-radius: 4px; font-size: 1.02rem; }
@@ -152,7 +152,7 @@ html[data-atmosphaere='aus'] .kerze .flamme, html[data-bewegung='wenig'] .kerze 
   text-shadow: 0 0 40px rgba(227, 166, 74, .25), 0 2px 0 #000;
 }
 .atrium-titel span { font-style: italic; font-size: .5em; color: var(--kerze); vertical-align: .35em; margin-right: .1em; }
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .atrium-titel { animation: kerzenschein 6s infinite ease-in-out; }
+html[data-kerzen='an']:not([data-bewegung='wenig']) .atrium-titel { animation: kerzenschein 6s infinite ease-in-out; }
 @keyframes kerzenschein { 0%, 100% { text-shadow: 0 0 40px rgba(227, 166, 74, .25), 0 2px 0 #000 } 40% { text-shadow: 0 0 55px rgba(227, 166, 74, .34), 0 2px 0 #000 } 60% { text-shadow: 0 0 30px rgba(227, 166, 74, .18), 0 2px 0 #000 } }
 .atrium-text { font-size: clamp(1.1rem, 2.2vw, 1.3rem); max-width: 56ch; margin: 1.4rem 0 1.8rem; color: var(--knochen); }
 .atrium-aktionen { display: flex; flex-wrap: wrap; gap: .8rem; }
@@ -639,7 +639,7 @@ html[data-bewegung='wenig'] .nadel-puls svg circle { animation: none; }
 .zwei-spalten { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .drei-spalten { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; }
 .drei-spalten .breit { grid-column: 1 / -1; }
-.modal-hg { position: fixed; inset: 0; z-index: 60; background: rgba(0, 0, 0, .65); display: grid; place-items: center; padding: 1rem; }
+.modal-hg { position: fixed; inset: 0; z-index: 200; background: rgba(0, 0, 0, .65); display: grid; place-items: center; padding: 1rem; }
 .modal { width: min(520px, 100%); max-height: 90dvh; overflow-y: auto; background: var(--nacht-2); border: 1px solid rgba(227, 166, 74, .25); border-radius: 6px; padding: 1.4rem 1.5rem; box-shadow: 0 30px 60px rgba(0, 0, 0, .7); }
 .modal h2 { font-weight: 400; font-size: 1.9rem; margin: 0 0 1rem; color: var(--papier-hell); }
 .modal h3 { font-weight: 400; font-size: 1.1rem; color: var(--knochen-leise); margin: 1.2rem 0 .5rem; }
@@ -649,7 +649,7 @@ html[data-bewegung='wenig'] .nadel-puls svg circle { animation: none; }
 .segment small { color: var(--knochen-leise); font-size: .82rem; line-height: 1.3; }
 .schalter-liste { display: grid; gap: .7rem; margin-top: 1.2rem; }
 .schalter { display: flex; gap: .7rem; align-items: flex-start; }
-.schalter input { margin-top: .35rem; accent-color: var(--stempel); width: 18px; height: 18px; }
+.schalter input { flex-shrink: 0; margin-top: .35rem; accent-color: var(--stempel); width: 18px; height: 18px; }
 .schalter span { display: grid; }
 .schalter small { color: var(--knochen-leise); }
 .modal-hinweis { color: var(--knochen-leise); font-size: .88rem; font-style: italic; margin: 1.2rem 0; }
@@ -701,7 +701,7 @@ html[data-bewegung='wenig'] .nadel-puls svg circle { animation: none; }
 @keyframes nebel-zieht { from { transform: translateX(-8%) } to { transform: translateX(8%) } }
 
 /* Das Licht flackert manchmal, als würde jemand an der Kerze vorbeigehen */
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .vignette { animation: licht-flackert 23s infinite; }
+html[data-vignette='an']:not([data-bewegung='wenig']) .vignette { animation: licht-flackert 23s infinite; }
 @keyframes licht-flackert {
   0%, 91%, 100% { background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, .7) 100%) }
   92% { background: radial-gradient(ellipse at center, rgba(0, 0, 0, .35) 30%, rgba(0, 0, 0, .9) 100%) }
@@ -710,7 +710,7 @@ html[data-atmosphaere='an']:not([data-bewegung='wenig']) .vignette { animation: 
   96% { background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, .7) 100%) }
 }
 .vignette { background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, .7) 100%); }
-html[data-atmosphaere='aus'] .nebel { display: none; }
+html[data-nebel='aus'] .nebel { display: none; }
 html[data-bewegung='wenig'] .nebel i { animation: none; }
 @media (prefers-reduced-motion: reduce) { .nebel i, .vignette { animation: none !important; } }
 
@@ -724,7 +724,7 @@ html[data-bewegung='wenig'] .nebel i { animation: none; }
 .atrium-text { margin-left: auto; margin-right: auto; color: #b8b3a8; text-shadow: 0 2px 12px #000; }
 .atrium-aktionen { justify-content: center; }
 .atrium-zaehler { text-shadow: 0 2px 8px #000; }
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .atrium-titel { animation: titel-atmet 9s infinite ease-in-out; }
+html[data-kerzen='an']:not([data-bewegung='wenig']) .atrium-titel { animation: titel-atmet 9s infinite ease-in-out; }
 @keyframes titel-atmet { 0%, 100% { text-shadow: 0 0 30px rgba(0, 0, 0, .9), 0 0 60px rgba(143, 163, 196, .25), 0 3px 0 #000 } 50% { text-shadow: 0 0 30px rgba(0, 0, 0, .9), 0 0 80px rgba(143, 163, 196, .4), 0 3px 0 #000 } }
 
 .gewoelbe .bogen-hinten { fill: #0b0d13; stroke: #1c2230; stroke-width: 3; }
@@ -741,11 +741,11 @@ html[data-atmosphaere='an']:not([data-bewegung='wenig']) .atrium-titel { animati
 .gewoelbe .rippe { fill: none; stroke: #121520; stroke-width: 12; }
 .gewoelbe .kette, .gewoelbe .arme, .gewoelbe .kandelaber > path { stroke: #2a2620; stroke-width: 3; fill: none; }
 .gewoelbe .flamme-g { transform-box: fill-box; transform-origin: center bottom; }
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .flamme-g { animation: kerze-zittert 2.6s infinite ease-in-out; }
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .f1 { animation-delay: -.7s; animation-duration: 3.1s; }
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .f2 { animation-delay: -1.4s; }
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .f3 { animation-delay: -.3s; animation-duration: 2.2s; }
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .licht { animation: halle-licht 7s infinite ease-in-out; }
+html[data-kerzen='an']:not([data-bewegung='wenig']) .gewoelbe .flamme-g { animation: kerze-zittert 2.6s infinite ease-in-out; }
+html[data-kerzen='an']:not([data-bewegung='wenig']) .gewoelbe .f1 { animation-delay: -.7s; animation-duration: 3.1s; }
+html[data-kerzen='an']:not([data-bewegung='wenig']) .gewoelbe .f2 { animation-delay: -1.4s; }
+html[data-kerzen='an']:not([data-bewegung='wenig']) .gewoelbe .f3 { animation-delay: -.3s; animation-duration: 2.2s; }
+html[data-kerzen='an']:not([data-bewegung='wenig']) .gewoelbe .licht { animation: halle-licht 7s infinite ease-in-out; }
 @keyframes kerze-zittert { 0%, 100% { opacity: 1 } 30% { opacity: .75 } 55% { opacity: .95 } 70% { opacity: .6 } }
 @keyframes halle-licht { 0%, 100% { opacity: 1 } 45% { opacity: .7 } 60% { opacity: .9 } }
 
@@ -774,7 +774,7 @@ html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .licht { anim
   background: radial-gradient(ellipse 70% 60% at 30% 25%, rgba(255, 200, 120, .12), transparent 70%);
   mix-blend-mode: soft-light;
 }
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .blatt::after { animation: kerzenschein-papier 5s infinite ease-in-out; }
+html[data-kerzen='an']:not([data-bewegung='wenig']) .blatt::after { animation: kerzenschein-papier 5s infinite ease-in-out; }
 @keyframes kerzenschein-papier { 0%, 100% { opacity: 1; transform: translate(0, 0) } 35% { opacity: .65; transform: translate(1.5%, 1%) } 60% { opacity: .9; transform: translate(-1%, .5%) } }
 
 /* Gruselfaktor wirkt auf die Umgebung */
@@ -784,7 +784,7 @@ html[data-atmosphaere='an']:not([data-bewegung='wenig']) .blatt::after { animati
   background: radial-gradient(ellipse at center, transparent 40%, rgba(40, 0, 0, .35) 100%);
 }
 .akte-seite.grusel-5::before { background: radial-gradient(ellipse at center, transparent 35%, rgba(60, 0, 0, .5) 100%); }
-html[data-atmosphaere='an']:not([data-bewegung='wenig']) .akte-seite.grusel-5::before { animation: herzschlag 4.2s infinite; }
+html[data-grusel='an']:not([data-bewegung='wenig']) .akte-seite.grusel-5::before { animation: herzschlag 4.2s infinite; }
 @keyframes herzschlag { 0%, 100% { opacity: .55 } 10% { opacity: 1 } 18% { opacity: .65 } 26% { opacity: .95 } 40% { opacity: .55 } }
 .akte-seite.grusel-5 .blatt-inhalt { text-shadow: 0 0 .6px rgba(30, 10, 5, .6); }
 .warnung-nacht { margin: 0 0 1.2rem; padding: .6rem 1rem; border: 1px solid rgba(142, 20, 16, .55); background: linear-gradient(90deg, rgba(90, 8, 6, .35), transparent); color: #e3b0a8; font-style: italic; }
@@ -800,3 +800,8 @@ html[data-atmosphaere='an']:not([data-bewegung='wenig']) .akte-seite.grusel-5::b
 .knopf { background: linear-gradient(#8e1c16, #5c0d0a); border-color: #3a0705; }
 .knopf.knopf-leise { background: rgba(6, 7, 11, .4); border-color: rgba(207, 202, 191, .3); }
 .kopf nav a.active { color: var(--papier-hell); background: rgba(143, 163, 196, .08); }
+
+html[data-grusel='aus'] .akte-seite::before { display: none; }
+.unterschalter { display: grid; gap: .6rem; margin: -.1rem 0 .3rem 1.1rem; padding-left: 1rem; border-left: 1px solid rgba(143, 163, 196, .25); }
+.unterschalter.aus { opacity: .4; }
+.schalter-haupt strong { font-size: 1.1rem; }

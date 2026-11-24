@@ -18,7 +18,14 @@ export default function App() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    document.documentElement.dataset.atmosphaere = e.atmosphaere ? 'an' : 'aus'
+    const d = document.documentElement.dataset
+    const an = (x) => (e.atmosphaere && x ? 'an' : 'aus')
+    d.atmosphaere = e.atmosphaere ? 'an' : 'aus'
+    d.kerzen = an(e.kerzen)
+    d.koernung = an(e.koernung)
+    d.vignette = an(e.vignette)
+    d.nebel = an(e.nebel)
+    d.grusel = an(e.gruselEffekte)
     document.documentElement.dataset.bewegung = e.wenigBewegung ? 'wenig' : 'normal'
     document.documentElement.dataset.schrift = e.schrift
   }, [e])

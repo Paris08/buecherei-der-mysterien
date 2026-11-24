@@ -35,7 +35,12 @@ export function useSpeicher(key, fallback) {
 
 export const STANDARD_EINSTELLUNGEN = {
   lesemodus: 'blaettern', // oder 'scrollen'
-  atmosphaere: true, // Kerzenflackern & Körnung
+  atmosphaere: true, // Hauptschalter für alle Effekte
+  kerzen: true, // Kerzenflackern & wanderndes Licht
+  koernung: true, // Filmkörnung
+  vignette: true, // dunkle Ränder & Lichtflackern
+  nebel: true, // ziehender Nebel
+  gruselEffekte: true, // roter Rand & Herzschlag bei hohem Gruselfaktor
   schrift: 'normal', // klein | normal | gross
   wenigBewegung: false,
 }
