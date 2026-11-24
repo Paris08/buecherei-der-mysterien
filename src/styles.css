@@ -1,11 +1,13 @@
 /* ============ Bücherei der Mysterien ============ */
 :root {
-  --nacht: #160d0c;
-  --nacht-2: #21130f;
-  --nacht-3: #2d1a14;
-  --holz: #3b2418;
-  --holz-hell: #5c3b27;
-  --holz-kante: #7a5134;
+  --nacht: #06070b;
+  --nacht-2: #0c0e15;
+  --nacht-3: #141824;
+  --mond: #8fa3c4;
+  --mond-leise: #46546d;
+  --holz: #1d140f;
+  --holz-hell: #33241a;
+  --holz-kante: #4a3424;
   --kerze: #e3a64a;
   --kerze-hell: #f3cf8a;
   --papier: #d9c49a;
@@ -14,8 +16,8 @@
   --tinte: #2a211a;
   --tinte-blau: #263450;
   --stempel: #a3231f;
-  --knochen: #d6cab0;
-  --knochen-leise: #a99a7e;
+  --knochen: #cfcabf;
+  --knochen-leise: #8d8a83;
   --fell: 'IM Fell English', 'Iowan Old Style', Georgia, serif;
   --fell-sc: 'IM Fell English SC', 'IM Fell English', Georgia, serif;
   --mono: 'Courier Prime', 'Courier New', monospace;
@@ -34,8 +36,9 @@ body {
   line-height: 1.55;
   color: var(--knochen);
   background:
-    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(227, 166, 74, .16), transparent 70%),
-    radial-gradient(ellipse 120% 80% at 50% 120%, #0d0706, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% -5%, rgba(120, 145, 190, .14), transparent 70%),
+    radial-gradient(ellipse 50% 30% at 50% 0%, rgba(227, 166, 74, .07), transparent 70%),
+    radial-gradient(ellipse 120% 80% at 50% 120%, #020203, transparent 60%),
     var(--nacht);
   background-attachment: fixed;
   min-height: 100vh;
@@ -70,7 +73,7 @@ html[data-atmosphaere='aus'] .vignette, html[data-atmosphaere='aus'] .koernung {
   height: var(--kopf-h);
   display: flex; align-items: center; gap: 1.2rem;
   padding: 0 clamp(12px, 3vw, 32px);
-  background: linear-gradient(to bottom, rgba(22, 13, 12, .97), rgba(22, 13, 12, .88));
+  background: linear-gradient(to bottom, rgba(6, 7, 11, .97), rgba(6, 7, 11, .86));
   border-bottom: 1px solid rgba(227, 166, 74, .14);
   backdrop-filter: blur(6px);
 }
@@ -507,8 +510,10 @@ html[data-bewegung='wenig'] .ordner-deckel { display: none; }
 
 /* ============ Karte ============ */
 .karten-seite { position: relative; height: calc(100dvh - var(--kopf-h)); }
-.karte { position: absolute; inset: 0; background: #0d0907; }
-.karte .leaflet-tile-pane { filter: sepia(.55) hue-rotate(-12deg) saturate(1.3) brightness(.85) contrast(1.08); }
+.karte { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, #0d121c, #04050a 75%); }
+.leaflet-container { background: transparent !important; }
+.land-tip { background: rgba(12, 14, 21, .92); color: var(--papier); border: 1px solid rgba(143, 163, 196, .3); font-family: var(--fell); font-size: .95rem; box-shadow: none; padding: 2px 8px; }
+.land-tip::before { display: none; }
 .leaflet-container { font-family: var(--fell); }
 .leaflet-control-attribution { background: rgba(22, 13, 12, .75) !important; color: var(--knochen-leise) !important; font-size: 10px; }
 .leaflet-control-attribution a { color: var(--knochen) !important; }
@@ -663,7 +668,7 @@ html[data-bewegung='wenig'] .nadel-puls svg circle { animation: none; }
 .editor-kopf { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 1rem; }
 .editor-formular textarea { line-height: 1.5; }
 .ort-karte { height: 320px; border-radius: 4px; border: 1px solid rgba(214, 202, 176, .2); }
-.ort-karte .leaflet-tile-pane { filter: sepia(.5) brightness(.9); }
+.ort-karte .leaflet-tile-pane { filter: invert(.92) hue-rotate(185deg) brightness(.85) sepia(.25); }
 .feld-hinweis { margin: 0; color: var(--knochen-leise); font-size: .92rem; }
 .bild-bereich { display: grid; grid-template-columns: 240px 1fr; gap: 1.6rem; align-items: start; }
 .bild-bereich > div { display: grid; gap: .9rem; }
@@ -677,3 +682,121 @@ html[data-bewegung='wenig'] .nadel-puls svg circle { animation: none; }
 .eigene-fahne input { padding: .25rem .5rem !important; font-size: .9rem; width: 150px; }
 .eigene-fahne button { background: none; border: 1px solid rgba(214, 202, 176, .25); border-radius: 3px; font-size: .85rem; }
 .editor-knoepfe { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; position: sticky; bottom: 0; background: linear-gradient(transparent, var(--nacht) 30%); padding: 1.6rem 0 1rem; z-index: 5; }
+
+
+/* =====================================================================
+   GRUSEL-SCHICHT: Nebel, Gewölbe, flackerndes Licht, gealtertes Papier
+   ===================================================================== */
+.nebel { position: fixed; inset: 0; pointer-events: none; z-index: 49; overflow: hidden; }
+.nebel i {
+  position: absolute; inset: -20%; opacity: .32;
+  background:
+    radial-gradient(ellipse 40% 18% at 20% 80%, rgba(120, 140, 175, .22), transparent 70%),
+    radial-gradient(ellipse 35% 14% at 75% 88%, rgba(120, 140, 175, .18), transparent 70%),
+    radial-gradient(ellipse 30% 12% at 50% 95%, rgba(150, 160, 180, .16), transparent 70%);
+  filter: blur(18px);
+  animation: nebel-zieht 70s linear infinite alternate;
+}
+.nebel i + i { animation-duration: 95s; animation-direction: alternate-reverse; opacity: .22; transform: scaleX(-1); }
+@keyframes nebel-zieht { from { transform: translateX(-8%) } to { transform: translateX(8%) } }
+
+/* Das Licht flackert manchmal, als würde jemand an der Kerze vorbeigehen */
+html[data-atmosphaere='an']:not([data-bewegung='wenig']) .vignette { animation: licht-flackert 23s infinite; }
+@keyframes licht-flackert {
+  0%, 91%, 100% { background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, .7) 100%) }
+  92% { background: radial-gradient(ellipse at center, rgba(0, 0, 0, .35) 30%, rgba(0, 0, 0, .9) 100%) }
+  93% { background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, .7) 100%) }
+  94.5% { background: radial-gradient(ellipse at center, rgba(0, 0, 0, .5) 20%, rgba(0, 0, 0, .95) 100%) }
+  96% { background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, .7) 100%) }
+}
+.vignette { background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, .7) 100%); }
+html[data-atmosphaere='aus'] .nebel { display: none; }
+html[data-bewegung='wenig'] .nebel i { animation: none; }
+@media (prefers-reduced-motion: reduce) { .nebel i, .vignette { animation: none !important; } }
+
+/* Eingangshalle */
+.atrium { position: relative; max-width: none; margin: 0 calc(-1 * clamp(14px, 3vw, 32px)); padding: 0; min-height: min(86vh, 780px); display: grid; place-items: end center; overflow: hidden; isolation: isolate; }
+.gewoelbe { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+.atrium::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to bottom, rgba(6, 7, 11, .35), rgba(6, 7, 11, .2) 40%, rgba(6, 7, 11, .92) 88%, var(--nacht)); }
+.atrium-inhalt { text-align: center; padding: 0 1rem clamp(2.5rem, 6vw, 4rem); max-width: 760px; }
+.atrium-titel { font-size: clamp(3.2rem, 11vw, 8rem); color: #e6dcc6; text-shadow: 0 0 30px rgba(0, 0, 0, .9), 0 0 60px rgba(143, 163, 196, .25), 0 3px 0 #000; }
+.atrium-titel span { color: #b9a37a; }
+.atrium-text { margin-left: auto; margin-right: auto; color: #b8b3a8; text-shadow: 0 2px 12px #000; }
+.atrium-aktionen { justify-content: center; }
+.atrium-zaehler { text-shadow: 0 2px 8px #000; }
+html[data-atmosphaere='an']:not([data-bewegung='wenig']) .atrium-titel { animation: titel-atmet 9s infinite ease-in-out; }
+@keyframes titel-atmet { 0%, 100% { text-shadow: 0 0 30px rgba(0, 0, 0, .9), 0 0 60px rgba(143, 163, 196, .25), 0 3px 0 #000 } 50% { text-shadow: 0 0 30px rgba(0, 0, 0, .9), 0 0 80px rgba(143, 163, 196, .4), 0 3px 0 #000 } }
+
+.gewoelbe .bogen-hinten { fill: #0b0d13; stroke: #1c2230; stroke-width: 3; }
+.gewoelbe .fenster { fill: #121a2a; }
+.gewoelbe .masswerk { fill: none; stroke: #070910; stroke-width: 7; }
+.gewoelbe .balkon { fill: #0a0b10; }
+.gewoelbe .gelaender { stroke: #151924; stroke-width: 3; fill: none; }
+.gewoelbe .regal-hg { fill: #08080b; }
+.gewoelbe .regal-brett-svg { fill: #1d1510; }
+.gewoelbe .buch.b0 { fill: #2a1712; } .gewoelbe .buch.b1 { fill: #1d1f26; } .gewoelbe .buch.b2 { fill: #3a2a1a; } .gewoelbe .buch.b3 { fill: #23130f; }
+.gewoelbe .tisch { fill: #1a120d; } .gewoelbe .tisch-bein { stroke: #1a120d; stroke-width: 8; }
+.gewoelbe .buchoffen { fill: #6d6556; opacity: .6; }
+.gewoelbe .saeule rect { fill: #0a0b0f; stroke: #171b25; stroke-width: 1.5; }
+.gewoelbe .rippe { fill: none; stroke: #121520; stroke-width: 12; }
+.gewoelbe .kette, .gewoelbe .arme, .gewoelbe .kandelaber > path { stroke: #2a2620; stroke-width: 3; fill: none; }
+.gewoelbe .flamme-g { transform-box: fill-box; transform-origin: center bottom; }
+html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .flamme-g { animation: kerze-zittert 2.6s infinite ease-in-out; }
+html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .f1 { animation-delay: -.7s; animation-duration: 3.1s; }
+html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .f2 { animation-delay: -1.4s; }
+html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .f3 { animation-delay: -.3s; animation-duration: 2.2s; }
+html[data-atmosphaere='an']:not([data-bewegung='wenig']) .gewoelbe .licht { animation: halle-licht 7s infinite ease-in-out; }
+@keyframes kerze-zittert { 0%, 100% { opacity: 1 } 30% { opacity: .75 } 55% { opacity: .95 } 70% { opacity: .6 } }
+@keyframes halle-licht { 0%, 100% { opacity: 1 } 45% { opacity: .7 } 60% { opacity: .9 } }
+
+/* Lesesaal & Regale kälter, schwärzer */
+.lesesaal { border-top-color: rgba(143, 163, 196, .14); }
+.abteilungen button.aktiv { border-bottom-color: #8e1410; }
+.regal-schild { background: linear-gradient(#6f6354, #4c4337); color: #e9e1cf; text-shadow: 0 1px 0 #000; box-shadow: 0 2px 8px rgba(0, 0, 0, .8), inset 0 0 0 1px rgba(0, 0, 0, .5); }
+.regal-brett { background: linear-gradient(to bottom, #020203, #0b0c11 85%); box-shadow: inset 0 24px 40px rgba(0, 0, 0, .9), inset 0 -40px 60px rgba(143, 163, 196, .05); }
+.ruecken { filter: brightness(.82) saturate(.8); }
+.ruecken:hover, .ruecken:focus-visible { filter: brightness(1.05); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .5), 0 12px 24px rgba(0, 0, 0, .8), 0 0 22px rgba(227, 166, 74, .18); }
+.karteikarte { background: rgba(143, 163, 196, .03); border-color: rgba(143, 163, 196, .1); }
+
+/* Gealtertes, fleckiges Papier mit Brandrändern */
+.blatt {
+  background:
+    radial-gradient(circle at 84% 12%, transparent 0 31px, rgba(95, 55, 20, .16) 32px, rgba(95, 55, 20, .05) 36px, transparent 39px),
+    radial-gradient(ellipse at 10% 92%, rgba(70, 40, 15, .28), transparent 40%),
+    radial-gradient(ellipse at 95% 70%, rgba(60, 30, 10, .18), transparent 35%),
+    radial-gradient(ellipse at 15% 10%, rgba(255, 245, 220, .25), transparent 50%),
+    linear-gradient(#ddcca5, #c7b183);
+  box-shadow: inset 0 0 70px rgba(60, 35, 10, .55), inset 0 0 12px rgba(40, 20, 5, .5), 0 30px 60px rgba(0, 0, 0, .8), 0 0 0 1px rgba(0, 0, 0, .5), -6px 0 0 -2px #a8925f, -10px 2px 0 -3px #8f7a4d;
+}
+/* Kerzenschein, der über das Papier wandert */
+.blatt::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background: radial-gradient(ellipse 70% 60% at 30% 25%, rgba(255, 200, 120, .12), transparent 70%);
+  mix-blend-mode: soft-light;
+}
+html[data-atmosphaere='an']:not([data-bewegung='wenig']) .blatt::after { animation: kerzenschein-papier 5s infinite ease-in-out; }
+@keyframes kerzenschein-papier { 0%, 100% { opacity: 1; transform: translate(0, 0) } 35% { opacity: .65; transform: translate(1.5%, 1%) } 60% { opacity: .9; transform: translate(-1%, .5%) } }
+
+/* Gruselfaktor wirkt auf die Umgebung */
+.akte-seite { position: relative; }
+.akte-seite.grusel-4::before, .akte-seite.grusel-5::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 48;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(40, 0, 0, .35) 100%);
+}
+.akte-seite.grusel-5::before { background: radial-gradient(ellipse at center, transparent 35%, rgba(60, 0, 0, .5) 100%); }
+html[data-atmosphaere='an']:not([data-bewegung='wenig']) .akte-seite.grusel-5::before { animation: herzschlag 4.2s infinite; }
+@keyframes herzschlag { 0%, 100% { opacity: .55 } 10% { opacity: 1 } 18% { opacity: .65 } 26% { opacity: .95 } 40% { opacity: .55 } }
+.akte-seite.grusel-5 .blatt-inhalt { text-shadow: 0 0 .6px rgba(30, 10, 5, .6); }
+.warnung-nacht { margin: 0 0 1.2rem; padding: .6rem 1rem; border: 1px solid rgba(142, 20, 16, .55); background: linear-gradient(90deg, rgba(90, 8, 6, .35), transparent); color: #e3b0a8; font-style: italic; }
+.stempel-nachts { color: #7e0f0b; font-size: 1.15rem; --dreh: 6deg; border-style: solid; }
+.ordner-deckel { background: linear-gradient(135deg, #9d8a62, #6f5e3d); }
+
+/* Karte */
+.karten-panel { background: rgba(8, 10, 15, .93); border-color: rgba(143, 163, 196, .18); }
+.leaflet-bar a { background: #0c0e15 !important; }
+
+/* Modals, Knöpfe im neuen Licht */
+.modal { background: #0c0e15; border-color: rgba(143, 163, 196, .22); }
+.knopf { background: linear-gradient(#8e1c16, #5c0d0a); border-color: #3a0705; }
+.knopf.knopf-leise { background: rgba(6, 7, 11, .4); border-color: rgba(207, 202, 191, .3); }
+.kopf nav a.active { color: var(--papier-hell); background: rgba(143, 163, 196, .08); }

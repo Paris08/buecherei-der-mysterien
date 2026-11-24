@@ -71,7 +71,7 @@ function OrtWahl({ lat, lng, onChange }) {
   const mk = useRef(null)
   useEffect(() => {
     const m = L.map(el.current, { worldCopyJump: true }).setView(lat != null ? [lat, lng] : [30, 10], lat != null ? 5 : 2)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap &copy; CARTO', subdomains: 'abcd' }).addTo(m)
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap', maxZoom: 18 }).addTo(m)
     m.on('click', (e) => onChange(+e.latlng.lat.toFixed(5), +e.latlng.wrap().lng.toFixed(5)))
     karte.current = m
     return () => m.remove()

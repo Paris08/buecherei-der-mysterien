@@ -46,6 +46,7 @@ export default function App() {
           </Routes>
         </Suspense>
       </main>
+      <div className="nebel" aria-hidden="true"><i /><i /></div>
       <div className="vignette" aria-hidden="true" />
       <div className="koernung" aria-hidden="true" />
     </>

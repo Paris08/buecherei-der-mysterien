@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import L from 'leaflet'
 import { feature } from 'topojson-client'
-import welt from 'world-atlas/countries-110m.json'
+import welt from 'world-atlas/countries-50m.json'
 import { useDaten } from '../lib/daten'
 import { BEREICHE, FAHNEN, STATUS, TYPEN, GRUSEL_TEXT } from '../lib/konstanten'
 import { KONTINENTE, KONTINENT_BOUNDS, kontinentVonLand, landName, numericZuAlpha2 } from '../lib/geo'
@@ -11,9 +11,25 @@ import { Grusel } from '../components/Kleinteile'
 
 window.L = L
 
+// Ringe, die über die Datumsgrenze springen, durchgehend machen (sonst entstehen Streifen quer über die Karte)
+const entwirren = (ring) => {
+  const out = [ring[0]]
+  for (let i = 1; i < ring.length; i++) {
+    let [lng, lat] = ring[i]
+    const prev = out[i - 1][0]
+    while (lng - prev > 180) lng -= 360
+    while (lng - prev < -180) lng += 360
+    out.push([lng, lat])
+  }
+  return out
+}
+const geomEntwirren = (g) => g.type === 'Polygon'
+  ? { ...g, coordinates: g.coordinates.map(entwirren) }
+  : { ...g, coordinates: g.coordinates.map((p) => p.map(entwirren)) }
+
 const LAENDER = feature(welt, welt.objects.countries).features
-  .map((f) => ({ ...f, code: numericZuAlpha2(f.id) }))
-  .filter((f) => f.code)
+  .map((f) => ({ ...f, geometry: geomEntwirren(f.geometry), code: numericZuAlpha2(f.id) }))
+  .filter((f) => f.code && f.code !== 'AQ')
 
 const pinFarbe = (a) => {
   if (a.typ === 'story') return '#8d97a6'
@@ -105,11 +121,30 @@ export default function Karte() {
     let abbruch = false
     import('leaflet.markercluster').then(() => {
       if (abbruch || karte.current) return
-      const m = L.map(container.current, { zoomControl: false, worldCopyJump: true, minZoom: 2, maxBounds: [[-85, -400], [85, 400]] }).setView([30, 10], 2)
+      const m = L.map(container.current, {
+        zoomControl: false, worldCopyJump: false, minZoom: 2, maxZoom: 9,
+        maxBounds: [[-75, -200], [85, 200]], maxBoundsViscosity: 0.8,
+        preferCanvas: true, attributionControl: true, zoomSnap: 0.5,
+      }).setView([30, 10], 2)
       L.control.zoom({ position: 'bottomright' }).addTo(m)
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd', maxZoom: 18,
+      m.attributionControl.setPrefix(false).addAttribution('Kartendaten: Natural Earth (gemeinfrei)')
+      // Gradnetz wie auf einer alten Seekarte
+      const netz = []
+      for (let lng = -180; lng <= 180; lng += 15) netz.push([[-85, lng], [85, lng]])
+      for (let lat = -75; lat <= 75; lat += 15) netz.push([[lat, -180], [lat, 180]])
+      const svg = L.svg({ padding: 0.5 })
+      L.polyline(netz, { renderer: svg, color: '#5d6f8f', weight: 0.6, opacity: 0.2, dashArray: '2 6', interactive: false }).addTo(m)
+      L.polyline([[0, -180], [0, 180]], { renderer: svg, color: '#8fa3c4', weight: 0.8, opacity: 0.25, interactive: false }).addTo(m)
+      // Landmassen selbst gezeichnet
+      const renderer = L.canvas({ padding: 0.3 })
+      L.geoJSON({ type: 'FeatureCollection', features: LAENDER }, {
+        renderer,
+        style: () => ({ color: '#4b4436', weight: 0.7, fillColor: '#1b1813', fillOpacity: 1 }),
+        onEachFeature: (f, layer) => {
+          layer.bindTooltip(landName(f.code), { sticky: true, direction: 'top', className: 'land-tip', opacity: 1 })
+          layer.on('mouseover', () => layer.setStyle({ fillColor: '#2a2419', color: '#8a7652' }))
+          layer.on('mouseout', () => layer.setStyle({ fillColor: '#1b1813', color: '#4b4436' }))
+        },
       }).addTo(m)
       cluster.current = L.markerClusterGroup({
         showCoverageOnHover: false,

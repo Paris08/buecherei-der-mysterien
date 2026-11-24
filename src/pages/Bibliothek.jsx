@@ -7,6 +7,7 @@ import { aktennummer, hash, jahreHer } from '../lib/utils'
 import { useZufallsAkte } from '../components/Kopf'
 import { Fahnen, FavoritKnopf, Grusel, Stempel } from '../components/Kleinteile'
 import { landName } from '../lib/geo'
+import Gewoelbe from '../components/Gewoelbe'
 
 const LEDER = {
   mysterium: ['#3b1614', '#2c1a2b', '#1f2a24', '#33241a', '#2a1d14'],
@@ -111,15 +112,18 @@ export default function Bibliothek() {
   return (
     <div className="bibliothek">
       <section className="atrium">
+        <Gewoelbe />
+        <div className="atrium-inhalt">
         <h1 className="atrium-titel">Bücherei<br /><span>der</span> Mysterien</h1>
         <p className="atrium-text">
-          Ein Archiv ungeklärter Fälle und wahrer Geschichten. Manche Akten sind geschlossen, andere warten seit Jahrhunderten auf jemanden, der sie zu Ende liest.
+          Ein Archiv ungeklärter Fälle und wahrer Geschichten. Manche Akten sind geschlossen. Andere warten seit Jahrhunderten darauf, dass jemand sie zu Ende liest. Mach die Tür hinter dir zu.
         </p>
         <div className="atrium-aktionen">
           <button className="knopf knopf-gross" onClick={() => zufall(gefiltert)}>Zufällige Akte ziehen</button>
           <Link className="knopf knopf-leise" to="/karte">Fundorte auf der Karte</Link>
         </div>
         {!laedt && <p className="atrium-zaehler">{akten.length} Akten im Archiv, davon {anzahlUngeloest} ungelöst.</p>}
+        </div>
       </section>
 
       <section className="lesesaal" aria-label="Akten durchsuchen">

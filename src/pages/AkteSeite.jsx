@@ -43,6 +43,7 @@ function Deckblatt({ akte }) {
         <div className="deckblatt-stempel">
           <Stempel art="status" wert={akte.status} />
           <Stempel art="echtheit" wert={akte.echtheit} />
+          {akte.gruselfaktor >= 5 && <span className="stempel stempel-nachts">Nicht allein lesen</span>}
         </div>
       </div>
       <div className="deckblatt-fuss">
@@ -157,7 +158,10 @@ export default function AkteSeite() {
   const spoilerSperre = akte.spoiler && !spoilerOk[akte.id]
 
   return (
-    <div className="akte-seite" key={akte.id}>
+    <div className={`akte-seite grusel-${akte.gruselfaktor}`} key={akte.id}>
+      {akte.gruselfaktor >= 5 && (
+        <p className="warnung-nacht" role="note">Gruselfaktor 5. Diese Akte liest man besser nicht allein und nicht nach Mitternacht.</p>
+      )}
       <div className="akte-leiste">
         <nav className="brotkrumen" aria-label="Pfad">
           <Link to="/">Bibliothek</Link>
